@@ -104,7 +104,7 @@ function create ()
     barriers = this.physics.add.static;
 
     this.physics.add.collider(enemies, barriers);
-    this.physics.add.collider(player, enemies, collectenemy, null, this);
+    this.physics.add.overlap(player, enemies, collectenemy, null, this);
     this.physics.add.overlap(player, xpPoint, collectXP, null, this);
     this.physics.add.overlap(player, potions, getPotion, null, this);
     this.physics.add.overlap(bullets, enemies, enemyHit, null, this);
