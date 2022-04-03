@@ -16,6 +16,7 @@ var config = {
 
 var player;
 var xp = 0;
+var xpNextLevel = 50;
 var enemies;
 var spawnTimer = 0;
 var enemyLvl=1;
@@ -166,13 +167,11 @@ function shoot(){
 spawnTimer++;
 
 if (spawnTimer>300 && enemies.countActive(true) <= 100){
-
   enemyLvl++;
   for (var i=0; i<2; i++){
     createEnemy();
     spawnTimer=0;
   }
-
   function createEnemy() {
     enemies.create(player.x+game.config.width/2+Phaser.Math.Between(0,100),player.y+Phaser.Math.Between(-1000,1000), 'enemy').health=1*enemyLvl;
     enemies.create(player.x-game.config.width/2-Phaser.Math.Between(0,100),player.y-Phaser.Math.Between(-1000,1000), 'enemy').health=1*enemyLvl;
@@ -182,47 +181,20 @@ if (spawnTimer>300 && enemies.countActive(true) <= 100){
 }
 
 if (gameOver!=true){
-
   for (let i=0; i<enemies.children.entries.length;i++) {
   enemies.children.entries[i].setVelocityX((player.x - enemies.children.entries[i].x)*.2);
   enemies.children.entries[i].setVelocityY((player.y - enemies.children.entries[i].y)*.2);
-
-  // if (enemies.children.entries[i].x >= player.x+game.config.width+1000){
-  //   // enemies.children.entries[i].disableBody(true, true);
-  //   console.log('They gone!');
-  //   enemies.children.entries[i].x=player.x+game.config.width;
-  // }
-
 }
 }
 
 //****************Character Advancement**************************//
-//level 2
-if (xp>=50){
-  playerLvl=2;
-  damageModifier=6;
+//leveling up
+if (xp>=xpNextLevel){
+  playerLvl+=1;
+  damageModifier=damageModifier+damageModifier*.2;
   lvlText.setText('LVL: ' + playerLvl);
-
-}
-//level 3
-if (xp>=100){
-  playerLvl=3;
-  damageModifier=20;
-  lvlText.setText('LVL: ' + playerLvl);
-}
-
-//level 4
-if (xp>=150){
-  playerLvl=4;
-  damageModifier=40;
-  lvlText.setText('LVL: ' + playerLvl);
-}
-
-//level 5
-if (xp>=200){
-  playerLvl=5;
-  damageModifier=60;
-  lvlText.setText('LVL: ' + playerLvl);
+  xpNextLevel= xpNextLevel+xpNextLevel*.25;
+  dexterity+=10;
 }
 
 
@@ -353,4 +325,5 @@ function quaffPotion() {
     potionText.setText('Potions: ' + playerPotions);
     hpText.setText('HP: ' + currentHP + "/" + maxHP);
   }
+
 }
